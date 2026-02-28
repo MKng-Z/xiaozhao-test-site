@@ -1,4 +1,10 @@
 {
+  "name": "xiaozhao-test-site",
+  "version": "1.0.0",
+  "description": "小爪的测试站点",
+  "scripts": {
+    "deploy": "gh-pages -d ."
+  },
   "devDependencies": {
     "gh-pages": "^6.3.0"
   }
