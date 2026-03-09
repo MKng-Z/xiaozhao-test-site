@@ -1,37 +1,14 @@
-// Mission Control 数据 - 自动生成于 2026-03-09 07:54:00
+// Auto-generated at 2026-03-09 08:28:37
 const missionData = {
-  "lastUpdate": "2026-03-09 07:54:00",
-  "gatewayStatus": true,
+  "lastUpdate": "2026-03-09 08:28:37",
+  "gatewayStatus": false,
   "stats": {
-    "total": 2,
-    "jjc": 1,
-    "shangshu": 1,
+    "total": 0,
+    "jjc": 0,
+    "shangshu": 0,
     "done": 0,
-    "active": 2
+    "active": 0
   },
-  "activeTasks": [
-    {
-      "id": "JJC-20260309-001",
-      "title": "配置 Mission Control 自动更新",
-      "state": "Shangshu",
-      "org": "尚书省",
-      "assignee": "尚书令"
-    },
-    {
-      "id": "S-20260309-001",
-      "title": "修复网站 404 问题",
-      "state": "Shangshu",
-      "org": "尚书省",
-      "assignee": "尚书令"
-    }
-  ],
-  "recentActivity": [
-    {
-      "id": "JJC-20260309-001",
-      "title": "配置 Mission Control 自动更新",
-      "state": "Shangshu",
-      "org": "尚书省",
-      "assignee": "尚书令"
-    }
-  ]
+  "activeTasks": [],
+  "recentActivity": []
 };
