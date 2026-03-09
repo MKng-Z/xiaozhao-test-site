@@ -1,6 +1,6 @@
-// Mission Control 数据 - 自动生成于 2026-03-09 12:50:01
+// Mission Control 数据 - 自动生成于 2026-03-09 12:55:01
 const missionData = {
-  "lastUpdate": "2026-03-09 12:50:01",
+  "lastUpdate": "2026-03-09 12:55:01",
   "gatewayStatus": false,
   "stats": {
     "total": 1,
