@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control - AI 运营合伙人仪表板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        h1 { 
+            font-size: 2.5rem; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .subtitle { color: #666; margin-top: 10px; }
+        .role-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        /* Grid Layout */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; margin-top: 30px; }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        
+        /* Cards */
+        .card {
+            background: #151520;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #1a1a2e;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); border-color: #667eea; }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .card-title { font-size: 1.1rem; font-weight: 600; }
+        
+        /* Status Colors */
+        .status-ok { color: #10b981; }
+        .status-warn { color: #f59e0b; }
+        .status-error { color: #ef4444; }
+        .status-info { color: #3b82f6; }
+        
+        /* Metrics */
+        .metric { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #1a1a2e; }
+        .metric:last-child { border-bottom: none; }
+        .metric-label { color: #888; font-size: 0.9rem; }
+        .metric-value { font-weight: 600; }
+        .metric-big {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .metric-big .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .metric-big .label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1a1a2e;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        /* Channel Cards */
+        .channel-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #0d0d14;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .channel-icon { font-size: 1.3rem; }
+        .channel-info { flex: 1; }
+        .channel-name { font-weight: 600; }
+        .channel-status { font-size: 0.8rem; color: #888; }
+        .channel-earnings { 
+            font-weight: 700; 
+            color: #10b981;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: opacity 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Lists */
+        .api-list { list-style: none; }
+        .api-list li { padding: 8px 0; display: flex; align-items: center; gap: 8px; }
+        .api-list li::before { content: "●"; font-size: 0.8rem; }
+        .api-list li.active::before { color: #10b981; }
+        .api-list li.pending::before { color: #f59e0b; }
+        .api-list li.inactive::before { color: #ef4444; }
+        
+        /* Log Entries */
+        .log-entry {
+            padding: 10px;
+            background: #0d0d14;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        .log-time { color: #667eea; }
+        .log-channel { color: #10b981; }
+        .log-earning { color: #f59e0b; }
+        
+        /* Task List */
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-check { 
+            width: 20px; 
+            height: 20px; 
+            border: 2px solid #667eea; 
+            border-radius: 4px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-check.done { background: #667eea; }
+        .task-text { flex: 1; }
+        .task-priority {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #1a1a2e;
+        }
+        .task-priority.p0 { background: #ef4444; color: white; }
+        .task-priority.p1 { background: #f59e0b; color: black; }
+        .task-priority.p2 { background: #3b82f6; color: white; }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background: #0d0d14;
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        /* Section Headers */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            border-top: 1px solid #1a1a2e;
+            margin-top: 40px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🐾 Mission Control</h1>
+            <p class="subtitle">AI 运营合伙人仪表板</p>
+            <div class="role-badge">💼 运营合伙人模式</div>
+            <p class="subtitle" style="margin-top: 15px;">上次更新: 2026-03-09 | 系统版本: v2.0</p>
+        </header>
+        
+        <!-- Key Metrics Row -->
+        <div class="section-title">📊 核心指标</div>
+        <div class="grid grid-4">
+            <!-- 总收益 -->
+            <div class="card">
+                <div class="metric-big">
+                    <div class="value">$0.00</div>
+                    <div class="label">累计收益 (2026)</div>
+                </div>
+                <div class="progress-text">
+                    <span>目标: $500</span>
+                    <span>0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- 今日任务 -->
+            <div class="card">
+                <div class="metric-big">
+                    <div class="value" style="color: #f59e0b;">0/3</div>
+                    <div class="label">今日任务完成</div>
+                </div>
+                <div class="progress-text">
+                    <span>目标: 每日≥3</span>
+                    <span>0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%; background: #f59e0b;"></div>
+                </div>
+            </div>
+            
+            <!-- 活跃渠道 -->
+            <div class="card">
+                <div class="metric-big">
+                    <div class="value" style="color: #ef4444;">0</div>
+                    <div class="label">活跃收益渠道</div>
+                </div>
+                <div class="progress-text">
+                    <span>目标: 3个</span>
+                    <span>0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%; background: #ef4444;"></div>
+                </div>
+            </div>
+            
+            <!-- 技能掌握 -->
+            <div class="card">
+                <div class="metric-big">
+                    <div class="value" style="color: #3b82f6;">15</div>
+                    <div class="label">已学习技能</div>
+                </div>
+                <div class="progress-text">
+                    <span>目标: 50个</span>
+                    <span>30%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%; background: #3b82f6;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Dashboard Grid -->
+        <div class="grid">
+            <!-- 收益渠道状态 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #1a2e1a;">💰</div>
+                    <div class="card-title">收益渠道</div>
+                </div>
+                <div class="channel-item">
+                    <div class="channel-icon">🐦</div>
+                    <div class="channel-info">
+                        <div class="channel-name">Twitter/X 增长</div>
+                        <div class="channel-status">🔴 待启动</div>
+                    </div>
+                    <div class="channel-earnings">$0</div>
+                </div>
+                <div class="channel-item">
+                    <div class="channel-icon">🛒</div>
+                    <div class="channel-info">
+                        <div class="channel-name">ClawMart 技能</div>
+                        <div class="channel-status">🔴 待开发</div>
+                    </div>
+                    <div class="channel-earnings">$0</div>
+                </div>
+                <div class="channel-item">
+                    <div class="channel-icon">🐛</div>
+                    <div class="channel-info">
+                        <div class="channel-name">赏金平台</div>
+                        <div class="channel-status">🔴 待注册</div>
+                    </div>
+                    <div class="channel-earnings">$0</div>
+                </div>
+                <div class="channel-item">
+                    <div class="channel-icon">📈</div>
+                    <div class="channel-info">
+                        <div class="channel-name">Polymarket 交易</div>
+                        <div class="channel-status">🟡 纸面运行中</div>
+                    </div>
+                    <div class="channel-earnings" style="color: #888;">模拟</div>
+                </div>
+                <a href="../GOAL-TRACKER.md" class="btn" style="width: 100%; text-align: center;">查看完整渠道矩阵</a>
+            </div>
+            
+            <!-- 今日任务 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #2e1a1a;">📋</div>
+                    <div class="card-title">今日任务 (2026-03-09)</div>
+                </div>
+                <div class="task-item">
+                    <div class="task-check done">✓</div>
+                    <div class="task-text">更新 GOAL-TRACKER.md</div>
+                    <span class="task-priority p1">P1</span>
+                </div>
+                <div class="task-item">
+                    <div class="task-check done">✓</div>
+                    <div class="task-text">升级仪表板系统</div>
+                    <span class="task-priority p1">P1</span>
+                </div>
+                <div class="task-item">
+                    <div class="task-check"></div>
+                    <div class="task-text">盘点现有赚钱研究</div>
+                    <span class="task-priority p2">P2</span>
+                </div>
+                <div class="task-item">
+                    <div class="task-check"></div>
+                    <div class="task-text">学习 1 个新技能</div>
+                    <span class="task-priority p2">P2</span>
+                </div>
+                <a href="./kanban.html" class="btn" style="width: 100%; text-align: center;">查看任务看板</a>
+            </div>
+            
+            <!-- 月度目标进度 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #1a1a2e;">🎯</div>
+                    <div class="card-title">3月目标进度</div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">基础设施搭建</span>
+                    <span class="metric-value status-warn">50%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%"></div>
+                </div>
+                <div class="metric" style="margin-top: 15px;">
+                    <span class="metric-label">真实渠道测试</span>
+                    <span class="metric-value status-error">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%; background: #ef4444;"></div>
+                </div>
+                <div class="metric" style="margin-top: 15px;">
+                    <span class="metric-label">PM 代理团队</span>
+                    <span class="metric-value status-error">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%; background: #ef4444;"></div>
+                </div>
+                <div class="metric" style="margin-top: 15px;">
+                    <span class="metric-label">首个真实收益</span>
+                    <span class="metric-value status-error">$0</span>
+                </div>
+            </div>
+            
+            <!-- PM 代理状态 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #2e1a2e;">🤖</div>
+                    <div class="card-title">PM 代理团队</div>
+                </div>
+                <ul class="api-list">
+                    <li class="inactive">pm-content (内容创作) - 待创建</li>
+                    <li class="inactive">pm-product (技能开发) - 待创建</li>
+                    <li class="inactive">pm-research (机会研究) - 待创建</li>
+                    <li class="inactive">pm-trading (交易执行) - 待创建</li>
+                </ul>
+                <div class="metric" style="margin-top: 15px;">
+                    <span class="metric-label">活跃代理</span>
+                    <span class="metric-value status-error">0/4</span>
+                </div>
+                <a href="../STATE.yaml" class="btn btn-outline" style="width: 100%; text-align: center;">查看 STATE.yaml</a>
+            </div>
+            
+            <!-- 系统状态 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #1a2e2e;">💻</div>
+                    <div class="card-title">系统状态</div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">磁盘空间</span>
+                    <span class="metric-value status-ok">25% 可用</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">内存使用</span>
+                    <span class="metric-value status-ok">39%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">系统负载</span>
+                    <span class="metric-value status-ok">0.05</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">OpenClaw 状态</span>
+                    <span class="metric-value status-ok">运行中</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">上次备份</span>
+                    <span class="metric-value status-ok">2026-03-01</span>
+                </div>
+            </div>
+            
+            <!-- API 状态 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #2e2e1a;">🔌</div>
+                    <div class="card-title">API 服务</div>
+                </div>
+                <ul class="api-list">
+                    <li class="active">Twitter/X API - 已配置</li>
+                    <li class="active">Brave Search - 已配置</li>
+                    <li class="active">Gemini API - 已配置</li>
+                    <li class="pending">AgentMail - 待验证</li>
+                    <li class="pending">Simmer/Polymarket - 待配置真实交易</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 收益趋势 -->
+        <div class="section-title">📈 收益趋势</div>
+        <div class="card">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">今日收益</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">本周收益</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">本月收益</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">$0</div>
+                    <div class="stat-label">累计收益</div>
+                </div>
+            </div>
+            <div style="text-align: center; color: #888; padding: 40px 0;">
+                <p>📊 收益数据将在第一个收入产生后开始记录</p>
+                <p style="font-size: 0.9rem; margin-top: 10px;">预计启动时间: 2026年3月第2周</p>
+            </div>
+        </div>
+        
+        <!-- 最近活动 -->
+        <div class="section-title">📝 最近活动</div>
+        <div class="card">
+            <div class="log-entry">
+                <span class="log-time">[01:46]</span> 
+                <span class="log-channel">[系统]</span> 
+                升级 Mission Control 仪表板至 v2.0 - 新增收益追踪和任务管理
+            </div>
+            <div class="log-entry">
+                <span class="log-time">[01:43]</span> 
+                <span class="log-channel">[系统]</span> 
+                更新 SOUL.md - 从"AI助手"升级为"AI运营合伙人"
+            </div>
+            <div class="log-entry">
+                <span class="log-time">[01:30]</span> 
+                <span class="log-channel">[系统]</span> 
+                清理 HEARTBEAT.md - 移除旧任务，只保留系统维护
+            </div>
+            <div class="log-entry">
+                <span class="log-time">[01:28]</span> 
+                <span class="log-channel">[系统]</span> 
+                研究 Felix Craft 人格架构
+            </div>
+        </div>
+        
+        <!-- 快速操作 -->
+        <div class="section-title">⚡ 快速操作</div>
+        <div class="grid grid-4">
+            <a href="../GOAL-TRACKER.md" class="card" style="text-decoration: none; color: inherit; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🎯</div>
+                <div style="font-weight: 600;">目标追踪</div>
+                <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">GOAL-TRACKER.md</div>
+            </a>
+            <a href="./kanban.html" class="card" style="text-decoration: none; color: inherit; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">📋</div>
+                <div style="font-weight: 600;">任务看板</div>
+                <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">Kanban Board</div>
+            </a>
+            <a href="../STATE.yaml" class="card" style="text-decoration: none; color: inherit; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+                <div style="font-weight: 600;">项目状态</div>
+                <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">STATE.yaml</div>
+            </a>
+            <a href="../SOUL.md" class="card" style="text-decoration: none; color: inherit; text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">🧠</div>
+                <div style="font-weight: 600;">我的灵魂</div>
+                <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">SOUL.md</div>
+            </a>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>OpenClaw Workspace v2.0 | 小爪 🐾 | AI 运营合伙人模式</p>
+            <p>本地路径: /root/.openclaw/workspace | 系统时间: 2026-03-09 01:46 UTC</p>
+        </div>
+    </div>
+</body>
+</html>
