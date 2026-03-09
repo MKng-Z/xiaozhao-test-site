@@ -1,0 +1,77 @@
+name: Update Mission Control Data
+
+on:
+  schedule:
+    # 每5分钟运行一次
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests
+        
+    - name: Update Mission Control data
+      run: |
+        python3 << 'PYEOF'
+import json
+import os
+from datetime import datetime
+
+# 模拟从看板系统获取数据
+# 实际使用时，这里需要调用看板API或读取看板数据文件
+
+data = {
+    "lastUpdate": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    "gatewayStatus": True,
+    "stats": {
+        "total": 0,
+        "jjc": 0,
+        "shangshu": 0,
+        "done": 0,
+        "active": 0
+    },
+    "activeTasks": [],
+    "recentActivity": []
+}
+
+# 读取看板数据（如果有本地文件）
+kanban_file = os.environ.get('KANBAN_DATA_FILE', 'data/kanban.json')
+if os.path.exists(kanban_file):
+    with open(kanban_file, 'r') as f:
+        kanban_data = json.load(f)
+        # 解析看板数据更新 stats
+        tasks = kanban_data.get('tasks', [])
+        data['stats']['total'] = len(tasks)
+        data['stats']['active'] = len([t for t in tasks if t.get('state') not in ['Done', 'Archived']])
+        data['activeTasks'] = tasks[:10]
+
+# 写入 data.js
+output = f"""// Mission Control 数据 - 自动生成于 {data['lastUpdate']}
+const missionData = {json.dumps(data, ensure_ascii=False, indent=2)};
+"""
+
+with open('mission-control/data.js', 'w') as f:
+    f.write(output)
+
+print(f"✅ 数据已更新: {data['lastUpdate']}")
+PYEOF
+      
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add mission-control/data.js
+        git diff --cached --quiet || (git commit -m "🤖 Auto-update Mission Control data - $(date '+%Y-%m-%d %H:%M')" && git push)
