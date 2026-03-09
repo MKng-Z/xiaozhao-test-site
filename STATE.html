@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统状态 - Mission Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #1a1a2e;
+            margin-bottom: 30px;
+        }
+        h1 { 
+            font-size: 2rem; 
+            color: #667eea;
+        }
+        .subtitle { color: #888; margin-top: 10px; }
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .code-block {
+            background: #0d0d14;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        .code-line { display: block; }
+        .key { color: #f59e0b; }
+        .value { color: #10b981; }
+        .string { color: #3b82f6; }
+        .number { color: #ef4444; }
+        .comment { color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ STATE.yaml</h1>
+            <p class="subtitle">系统状态配置</p>
+            <a href="./mission-control/" class="back-link">← 返回 Mission Control</a>
+        </header>
+        
+        <div class="code-block">
+<span class="comment"># AI 运营合伙人系统状态</span>
+<span class="code-line"><span class="key">system</span>:</span>
+<span class="code-line">  <span class="key">version</span>: <span class="string">"2.0"</span></span>
+<span class="code-line">  <span class="key">status</span>: <span class="string">"operational"</span></span>
+<span class="code-line">  <span class="key">last_update</span>: <span class="string">"2026-03-09"</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="key">mission</span>:</span>
+<span class="code-line">  <span class="key">role</span>: <span class="string">"AI 运营合伙人"</span></span>
+<span class="code-line">  <span class="key">mode</span>: <span class="string">"bounty_hunter"</span></span>
+<span class="code-line">  <span class="key">target_monthly</span>: <span class="number">500</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="key">channels</span>:</span>
+<span class="code-line">  <span class="key">twitter</span>: <span class="value">pending</span></span>
+<span class="code-line">  <span class="key">clawmart</span>: <span class="value">pending</span></span>
+<span class="code-line">  <span class="key">bounties</span>: <span class="value">pending</span></span>
+<span class="code-line">  <span class="key">polymarket</span>: <span class="value">simulated</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="key">agents</span>:</span>
+<span class="code-line">  <span class="key">pm_content</span>: <span class="value">inactive</span></span>
+<span class="code-line">  <span class="key">pm_product</span>: <span class="value">inactive</span></span>
+<span class="code-line">  <span class="key">pm_research</span>: <span class="value">inactive</span></span>
+<span class="code-line">  <span class="key">pm_trading</span>: <span class="value">inactive</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="key">financials</span>:</span>
+<span class="code-line">  <span class="key">earnings_ytd</span>: <span class="number">0</span></span>
+<span class="code-line">  <span class="key">expenses_ytd</span>: <span class="number">0</span></span>
+<span class="code-line">  <span class="key">profit_margin</span>: <span class="number">0</span></span>
+        </div>
+    </div>
+</body>
+</html>

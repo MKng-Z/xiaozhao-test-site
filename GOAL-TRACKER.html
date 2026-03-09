@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收益渠道矩阵 - Mission Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #1a1a2e;
+            margin-bottom: 30px;
+        }
+        h1 { 
+            font-size: 2rem; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; margin-top: 10px; }
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        .channel-grid { display: grid; gap: 20px; }
+        .channel-card {
+            background: #151520;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #1a1a2e;
+        }
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .channel-icon { font-size: 2rem; }
+        .channel-name { font-size: 1.2rem; font-weight: 600; }
+        .channel-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+        .status-pending { background: #2e1a1a; color: #ef4444; }
+        .status-active { background: #1a2e1a; color: #10b981; }
+        .status-progress { background: #2e2e1a; color: #f59e0b; }
+        .channel-desc { color: #888; margin-bottom: 15px; }
+        .channel-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .metric {
+            text-align: center;
+            padding: 10px;
+            background: #0d0d14;
+            border-radius: 8px;
+        }
+        .metric-value { font-weight: 600; color: #667eea; }
+        .metric-label { font-size: 0.8rem; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 收益渠道矩阵</h1>
+            <p class="subtitle">AI 运营合伙人收入渠道全景</p>
+            <a href="./mission-control/" class="back-link">← 返回 Mission Control</a>
+        </header>
+        
+        <div class="channel-grid">
+            <div class="channel-card">
+                <div class="channel-header">
+                    <span class="channel-icon">🐦</span>
+                    <span class="channel-name">Twitter/X 增长</span>
+                    <span class="channel-status status-pending">待启动</span>
+                </div>
+                <div class="channel-desc">自动化内容创作与粉丝增长，通过 AI 生成高质量推文和互动。</div>
+                <div class="channel-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$0</div>
+                        <div class="metric-label">累计收益</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">粉丝数</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">-</div>
+                        <div class="metric-label">ROI</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-header">
+                    <span class="channel-icon">🛒</span>
+                    <span class="channel-name">ClawMart 技能</span>
+                    <span class="channel-status status-pending">待开发</span>
+                </div>
+                <div class="channel-desc">开发可复用的 AI 技能包，在 ClawMart 平台销售。</div>
+                <div class="channel-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$0</div>
+                        <div class="metric-label">累计收益</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">技能数</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">-</div>
+                        <div class="metric-label">下载量</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-header">
+                    <span class="channel-icon">🐛</span>
+                    <span class="channel-name">赏金平台</span>
+                    <span class="channel-status status-pending">待注册</span>
+                </div>
+                <div class="channel-desc">参与 Bug 赏金、众包任务等平台，赚取任务奖励。</div>
+                <div class="channel-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$0</div>
+                        <div class="metric-label">累计收益</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">完成任务</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">-</div>
+                        <div class="metric-label">成功率</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-header">
+                    <span class="channel-icon">📈</span>
+                    <span class="channel-name">Polymarket 交易</span>
+                    <span class="channel-status status-progress">模拟运行</span>
+                </div>
+                <div class="channel-desc">预测市场交易，当前处于模拟运行阶段。</div>
+                <div class="channel-metrics">
+                    <div class="metric">
+                        <div class="metric-value">$0</div>
+                        <div class="metric-label">模拟收益</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">交易数</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">-</div>
+                        <div class="metric-label">胜率</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
