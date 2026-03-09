@@ -1,0 +1,63 @@
+# STATE.yaml - 系统状态配置
+
+system:
+  name: "Mission Control"
+  version: "2.0"
+  status: "operational"
+  last_update: "2026-03-09"
+
+goals:
+  year_2026:
+    revenue_target: 500
+    current_revenue: 0
+    monthly_target: 100
+    
+channels:
+  twitter:
+    name: "Twitter/X 增长"
+    status: "pending"
+    expected_revenue: "50-100/month"
+  
+  clawmart:
+    name: "ClawMart 技能"
+    status: "pending"
+    expected_revenue: "30-50/month"
+  
+  bounties:
+    name: "赏金平台"
+    status: "pending"
+    expected_revenue: "20-40/month"
+  
+  polymarket:
+    name: "Polymarket 交易"
+    status: "simulation"
+    expected_revenue: "10-30/month"
+
+metrics:
+  active_channels: 0
+  completed_tasks: 1
+  skills_learned: 15
+  
+agents:
+  pm_content:
+    name: "内容创作代理"
+    status: "pending"
+  
+  pm_product:
+    name: "技能开发代理"
+    status: "pending"
+  
+  pm_research:
+    name: "机会研究代理"
+    status: "pending"
+  
+  pm_trading:
+    name: "交易执行代理"
+    status: "pending"
+
+apis:
+  twitter: "configured"
+  brave_search: "configured"
+  gemini: "configured"
+  agentmail: "pending"
+  polymarket: "simulation"

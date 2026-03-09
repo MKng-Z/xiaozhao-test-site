@@ -10,10 +10,9 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0a0a0f;
             color: #e0e0e0;
-            min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         header {
             text-align: center;
             padding: 30px 0;
@@ -22,18 +21,25 @@
         }
         h1 { 
             font-size: 2rem; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
         }
-        .subtitle { color: #888; margin-top: 10px; }
+        .subtitle { color: #666; margin-top: 10px; }
         .back-link {
             display: inline-block;
             margin-top: 15px;
             color: #667eea;
             text-decoration: none;
         }
-        .board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .back-link:hover { text-decoration: underline; }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
         .column {
             background: #151520;
             border-radius: 12px;
@@ -41,6 +47,7 @@
             border: 1px solid #1a1a2e;
         }
         .column-header {
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -53,63 +60,118 @@
             background: #1a1a2e;
             padding: 2px 8px;
             border-radius: 12px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
-        .task {
+        
+        .task-card {
             background: #0d0d14;
-            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
             border-left: 3px solid #667eea;
+            transition: transform 0.2s;
         }
-        .task-title { font-weight: 500; }
+        .task-card:hover { transform: translateX(5px); }
+        .task-id {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
         .task-meta {
+            display: flex;
+            gap: 10px;
             font-size: 0.8rem;
             color: #888;
-            margin-top: 5px;
         }
-        .status-done { border-left-color: #10b981; }
-        .status-progress { border-left-color: #f59e0b; }
-        .status-todo { border-left-color: #ef4444; }
-        .loading { text-align: center; color: #888; padding: 40px; }
+        .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .tag-jjc { background: #f59e0b20; color: #f59e0b; }
+        .tag-shangshu { background: #3b82f620; color: #3b82f6; }
+        .tag-done { background: #10b98120; color: #10b981; }
+        
+        @media (max-width: 1024px) {
+            .board { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .board { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>📋 任务看板</h1>
-            <p class="subtitle">实时任务追踪与管理</p>
-            <a href="./" class="back-link">← 返回 Mission Control</a>
+            <p class="subtitle">三省六部制任务管理</p>
+            <a href="./index.html" class="back-link">← 返回 Mission Control</a>
         </header>
         
         <div class="board">
+            <!-- 待受理 -->
             <div class="column">
                 <div class="column-header">
                     📥 待受理 (JJC)
                     <span class="column-count" id="jjc-count">0</span>
                 </div>
                 <div id="jjc-tasks">
-                    <div class="loading">正在加载...</div>
+                    <div class="task-card">
+                        <div class="task-id">JJC-20260309-001</div>
+                        <div class="task-title">配置 Mission Control 自动更新</div>
+                        <div class="task-meta">
+                            <span class="tag tag-jjc">中书省</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
+            <!-- 执行中 -->
             <div class="column">
                 <div class="column-header">
-                    🔨 执行中 (尚书省)
+                    🔄 执行中 (尚书省)
                     <span class="column-count" id="shangshu-count">0</span>
                 </div>
                 <div id="shangshu-tasks">
-                    <div class="loading">正在加载...</div>
+                    <div class="task-card" style="border-left-color: #3b82f6;">
+                        <div class="task-id">S-20260309-001</div>
+                        <div class="task-title">修复网站 404 问题</div>
+                        <div class="task-meta">
+                            <span class="tag tag-shangshu">进行中</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
+            <!-- 已完成 -->
             <div class="column">
                 <div class="column-header">
-                    ✅ 已完成
+                    ✅ 已完成 (Done)
                     <span class="column-count" id="done-count">0</span>
                 </div>
                 <div id="done-tasks">
-                    <div class="loading">正在加载...</div>
+                    <div class="task-card" style="border-left-color: #10b981; opacity: 0.7;">
+                        <div class="task-id">INIT-001</div>
+                        <div class="task-title">初始化 Mission Control</div>
+                        <div class="task-meta">
+                            <span class="tag tag-done">已完成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 归档 -->
+            <div class="column">
+                <div class="column-header">
+                    📦 归档 (Archived)
+                    <span class="column-count">-</span>
+                </div>
+                <div style="text-align: center; color: #666; padding: 40px 0;">
+                    暂无归档任务
                 </div>
             </div>
         </div>
@@ -117,44 +179,12 @@
     
     <script src="data.js"></script>
     <script>
-        // 加载数据并渲染
-        function renderBoard() {
-            if (typeof missionData === 'undefined') {
-                document.querySelectorAll('.loading').forEach(el => {
-                    el.textContent = '暂无数据';
-                });
-                return;
-            }
-            
-            const tasks = missionData.activeTasks || [];
-            const jjcTasks = tasks.filter(t => t.state === 'JJC');
-            const shangshuTasks = tasks.filter(t => t.state === 'Shangshu');
-            const doneTasks = tasks.filter(t => t.state === 'Done');
-            
-            document.getElementById('jjc-count').textContent = jjcTasks.length;
-            document.getElementById('shangshu-count').textContent = shangshuTasks.length;
-            document.getElementById('done-count').textContent = doneTasks.length;
-            
-            renderColumn('jjc-tasks', jjcTasks, 'status-todo');
-            renderColumn('shangshu-tasks', shangshuTasks, 'status-progress');
-            renderColumn('done-tasks', doneTasks, 'status-done');
+        // 从 data.js 加载任务数据
+        if (typeof missionData !== 'undefined') {
+            document.getElementById('jjc-count').textContent = missionData.stats.jjc;
+            document.getElementById('shangshu-count').textContent = missionData.stats.shangshu;
+            document.getElementById('done-count').textContent = missionData.stats.done;
         }
-        
-        function renderColumn(id, tasks, statusClass) {
-            const container = document.getElementById(id);
-            if (tasks.length === 0) {
-                container.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">暂无任务</div>';
-                return;
-            }
-            container.innerHTML = tasks.map(t => `
-                <div class="task ${statusClass}">
-                    <div class="task-title">${t.title}</div>
-                    <div class="task-meta">${t.id} | ${t.org}</div>
-                </div>
-            `).join('');
-        }
-        
-        renderBoard();
     </script>
 </body>
 </html>
